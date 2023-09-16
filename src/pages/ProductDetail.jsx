@@ -1,11 +1,11 @@
 import useProductItem from '@/utils/useProductItem';
 import { useParams } from 'react-router-dom';
-import {getPbImageURL} from '@/utils/getPbImageUrl';
+import getPbImageURL from '@/utils/getPbImageUrl';
 import Heart from '@/components/ProductDetail/Heart';
 import CountButton from '@/components/ProductDetail/CountButton';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import {pb} from '@/api/pocketbase';
+import pb from '@/api/pocketbase';
 import { useEffect } from 'react';
 import { useAuth } from '@/contexts/Auth';
 
@@ -220,10 +220,7 @@ function ProductDetail() {
         className=" m-auto pt-4"
       />
       <div className="m-auto h-[1px] bg-black mt-4 mb-2"></div>
-      <form
-        className="py-4 mx-4 flex"
-        onSubmit={editingCommentId ? handleEditSubmit : handleCommentSubmit}
-      >
+      <form className="py-4 mx-4 flex" onSubmit={editingCommentId ? handleEditSubmit : handleCommentSubmit}>
         <textarea
           type="text"
           value={comment}

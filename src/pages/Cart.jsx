@@ -1,8 +1,11 @@
-import {getPbImageURL} from '@/utils/getPbImageUrl';
+import getPbImageURL from '@/utils/getPbImageUrl';
 import CountButton from '@/components/ProductDetail/CountButton';
 import remove from '/assets/icons/close_icon.svg';
 import { useState } from 'react';
-import nocash from '/assets/imgs/product_search_notfound.png'
+import nocash from '/assets/imgs/product_search_notfound.png';
+import { useEffect } from 'react';
+import { useAuth } from '@/contexts/Auth';
+import pb from '@/api/pocketbase';
 
 function Cart() {
   const [showModal, setShowModal] = useState(false);
