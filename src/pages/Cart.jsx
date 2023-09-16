@@ -1,39 +1,57 @@
-import useProductItem from '@/utils/useProductItem';
-import { useParams } from 'react-router-dom';
-import getPbImageURL from '@/utils/getPbImageUrl';
+import {getPbImageURL} from '@/utils/getPbImageUrl';
 import CountButton from '@/components/ProductDetail/CountButton';
 import remove from '/assets/icons/close_icon.svg';
 import { useState } from 'react';
-import nocash from '/assets/imgs/product_search_notfound.png';
+import nocash from '/assets/imgs/product_search_notfound.png'
 
 function Cart() {
-  const { productTitle } = useParams();
-  const { data } = useProductItem(productTitle);
   const [showModal, setShowModal] = useState(false);
+  const { user } = useAuth();
+  const [userData, setUserData] = useState(null); // userData 상태 추가
 
+  useEffect(() => {
+    const fetchCartItem = async () => {
+      try {
+        // 현재 로그인한 사용자 정보 ( 장바구니 포함 )
+        const data = await pb
+          .collection('users')
+          .getOne(user.id, { expand: 'AddCart' });
+        setUserData(data);
+      } catch (error) {
+        console.error('Error fetching cart items: ', error);
+      }
+    };
+    fetchCartItem();
+  }, []);
   return (
     <>
-      <div className="max-w-screen-pet-l m-auto px-5">
+      <div className="max-w-screen-pet-l h-full m-auto px-5">
         <div className="h-24 bg-pet-bg mt-14 rounded-xl mb-6 shadow-[4px_4px_8px_0_rgba(0,0,0,0.16)]">
-          <div className="px-4 py-5 flex justify-start relative">
-            <img
-              src={getPbImageURL(data, 'photo')}
-              alt="상품"
-              className="w-20 h-16 bg-black"
-            />
-            <div className="pl-4">
-              <div className="">
-                <div className="text-xl">{data.title}제품명</div>
-                <div className="text-lg">{data.price}0,000원</div>
+          {userData &&
+            userData.expand.AddCart.map((item, index) => (
+              <div
+                key={index}
+                className="px-4 py-5 flex justify-start relative"
+              >
+                <img
+                  src={getPbImageURL(item, 'photo')}
+                  alt="상품"
+                  className="w-20 h-16 bg-black"
+                />
+                <div className="pl-4">
+                  <div className="">
+                    <div className="text-xl">{item.title}</div>
+                    <div className="text-lg">{item.price}원</div>
+                  </div>
+                  <button className="absolute top-4 right-4">
+                    <img src={remove} alt="제거버튼" />
+                  </button>
+                  <div className="absolute right-4 top-12">
+                    <CountButton />
+                  </div>
+                </div>
               </div>
-              <button className="absolute top-4 right-4">
-                <img src={remove} alt="제거버튼" />
-              </button>
-              <div className="absolute right-4 top-12">
-                <CountButton />
-              </div>
-            </div>
-          </div>
+            ))}
         </div>
         <div className="mt-20 flex justify-between">
           <p>상품금액</p>
