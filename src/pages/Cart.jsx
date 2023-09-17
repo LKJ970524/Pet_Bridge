@@ -134,7 +134,7 @@ function Cart() {
             <img
               src={nocash}
               alt="모르겠어용"
-              className="relative left-[17%]"
+              className="relative left-[25%]"
             />
             <button
               className="w-full m-auto bg-primary rounded-lg text-lg"
